@@ -1,3 +1,5 @@
+import sys
+
 stack = []
 output= []
 
@@ -12,11 +14,11 @@ def actionPush(value):
     data = value.split(' ')
     stack.append(int(data[1]))
 
-countOperations = int(input())
+countOperations = int(sys.stdin.readline())
 
 ii = 0
 while ii < countOperations:
-    command = input()
+    command = sys.stdin.readline().strip()
 
     if command == 'pop':
         actionPop()
