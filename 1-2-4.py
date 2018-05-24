@@ -3,22 +3,25 @@ import sys
 stackMax = []
 stackVal = []
 output   = []
+index    = 0
 
 def actionPop():
-    if len(stackVal) > 0:
+    global index
+    if index > 0:
+        index -= 1
         stackMax.pop()
         return stackVal.pop()
     else:
         return False
     
 def actionMax():
-    cnt = len(stackMax)
-    if cnt > 0:
-        return stackMax[cnt -1]
+    if index > 0:
+        return stackMax[index - 1]
     else:
         return False
 
 def actionPush(value):
+    global index
     data = value.split(' ')
     if data[0] != 'push':
         return False
@@ -31,6 +34,7 @@ def actionPush(value):
     else:
         val = value
 
+    index += 1
     stackMax.append(val)
     stackVal.append(value)
 
