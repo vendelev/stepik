@@ -1,0 +1,157 @@
+swagger: '2.0'
+info:
+  title: Сервис обратной связи
+  version: 1.0.0
+host: '10.126.181.115:8001'
+schemes:
+  - "http"
+basePath: /services/feedback/api
+consumes:
+  - multipart/form-data
+produces:
+  - application/vnd.api+json
+paths:
+  /v1/rest:
+    post:
+      tags:
+        - API
+      summary: Отправить сообщение в HPSM
+      parameters:
+        - name: user
+          in: formData
+          description: Имя пользователя
+          required: true
+          type: string
+        - name: email
+          in: formData
+          description: Email пользователя
+          required: true
+          type: string
+          format: email
+        - name: portal
+          in: formData
+          description: Код портала
+          required: true
+          type: string
+        - name: problemtype
+          in: formData
+          description: Имя шаблона
+          required: true
+          type: string
+        - name: title
+          in: formData
+          description: Заголовок обращения
+          required: true
+          type: string
+        - name: descriptions
+          in: formData
+          description: Обращение пользователя
+          required: true
+          type: string
+        - name: clientip
+          in: formData
+          description: IP пользователя
+          required: false
+          type: string
+        - name: ssoid
+          in: formData
+          description: SSOID пользователя
+          required: false
+          type: string
+        - name: userid
+          in: formData
+          description: Внутренний UserId пользователя
+          required: false
+          type: string
+        - name: comments
+          in: formData
+          description: Комментарий пользователя
+          type: string
+        - name: usertype
+          in: formData
+          description: Тип пользователя
+          type: string
+        - name: mosid
+          in: formData
+          description: mos_id пользователя
+          type: string
+        - name: attachment
+          in: formData
+          description: Вложение
+          required: false
+          type: file
+      responses:
+        200:
+          description: Статус отправки обращения
+          schema:
+            $ref: '#/definitions/FeedbackJsonApi'
+        400:
+          description: Ошибки входящего запроса
+          schema:
+            $ref: '#/definitions/JSONAPI_Errors'
+        405:
+          description: Метод не поддерживается
+          schema:
+            $ref: '#/definitions/JSONAPI_Errors'
+        500:
+          description: Внутренние ошибки сервера
+          schema:
+            $ref: '#/definitions/JSONAPI_Errors'
+definitions:
+  JSONAPI_Error:
+    description: Описание ошибки
+    properties:
+      title:
+        type: string
+      detail:
+        type: string
+      code:
+        type: integer
+      status:
+        type: integer
+    type: object
+  JSONAPI_Errors:
+    description: List of Error object
+    properties:
+      errors:
+        type: array
+        items:
+          $ref: '#/definitions/JSONAPI_Error'
+    type: object
+  FeedbackJsonApi:
+    description: Статус отправки обращения
+    properties:
+      data:
+        $ref: '#/definitions/FeedbackJsonApi_Data'
+  FeedbackJsonApi_Data:
+    description: Список статусов
+    type: array
+    items:
+      $ref: '#/definitions/FeedbackJsonApi_DataArr'
+  FeedbackJsonApi_DataArr:
+    description: Описание статуса
+    required:
+      - type
+      - id
+      - attributes
+    properties:
+      type:
+        type: string
+      id:
+        type: string
+      attributes:
+        $ref: '#/definitions/FeedbackJsonApi_Attr'
+    type: object
+  FeedbackJsonApi_Attr:
+    required:
+      - status
+      - message
+      - returnCode
+    properties:
+      status:
+        type: string
+      message:
+        type: string
+      returnCode:
+        type: string
+    type: object
